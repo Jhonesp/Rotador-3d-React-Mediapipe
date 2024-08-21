@@ -8,6 +8,7 @@ const HandControl = () => {
   const videoRef = useRef(null);
 
   useEffect(() => {
+    // Configuración básica de MediaPipe Hands
     const hands = new Hands({
       locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
     });
@@ -19,6 +20,7 @@ const HandControl = () => {
       minTrackingConfidence: 0.5,
     });
 
+    // Configuración de detección de resultados
     hands.onResults((results) => {
       if (results.multiHandLandmarks.length > 0) {
         const landmarks = results.multiHandLandmarks[0];
@@ -28,6 +30,7 @@ const HandControl = () => {
       }
     });
 
+    // Inicialización de la cámara después de configurar MediaPipe Hands
     const camera = new Camera(videoRef.current, {
       onFrame: async () => {
         await hands.send({ image: videoRef.current });
@@ -37,6 +40,11 @@ const HandControl = () => {
     });
 
     camera.start();
+
+    // Limpieza de recursos al desmontar el componente
+    return () => {
+      camera.stop();
+    };
   }, []);
 
   return (
