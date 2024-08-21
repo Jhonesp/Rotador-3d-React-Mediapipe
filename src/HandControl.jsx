@@ -10,10 +10,8 @@ const HandControl = () => {
   useEffect(() => {
     // Configuración básica de MediaPipe Hands
     const hands = new Hands({
-        locateFile: (file) => {
-          return `./node_modules/@mediapipe/hands/${file}`;
-        },
-      });
+      locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`,
+    });
 
     hands.setOptions({
       maxNumHands: 1,
