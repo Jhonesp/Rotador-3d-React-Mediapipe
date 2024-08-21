@@ -1,45 +1,23 @@
-import React, { useRef, useEffect } from 'react';
-import * as THREE from 'three';
+// Cube.js
+import React, { useRef } from 'react';
+import { useFrame } from '@react-three/fiber';
 
 const Cube = ({ rotation }) => {
-  const mountRef = useRef(null);
+  const meshRef = useRef();
 
-  useEffect(() => {
-    // Configuración básica de Three.js
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(
-      75,
-      mountRef.current.clientWidth / mountRef.current.clientHeight,
-      0.1,
-      1000
-    );
-    const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
-    mountRef.current.appendChild(renderer.domElement);
+  useFrame(() => {
+    if (meshRef.current) {
+      meshRef.current.rotation.x = rotation.y * Math.PI; // Rotación en X
+      meshRef.current.rotation.y = rotation.x * Math.PI; // Rotación en Y
+    }
+  });
 
-    // Creación del cubo
-    const geometry = new THREE.BoxGeometry();
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-    const cube = new THREE.Mesh(geometry, material);
-    scene.add(cube);
-
-    camera.position.z = 5;
-
-    const animate = () => {
-      requestAnimationFrame(animate);
-      cube.rotation.x = rotation.x;
-      cube.rotation.y = rotation.y;
-      renderer.render(scene, camera);
-    };
-
-    animate();
-
-    return () => {
-      mountRef.current.removeChild(renderer.domElement);
-    };
-  }, [rotation]);
-
-  return <div ref={mountRef} style={{ width: '100%', height: '400px' }} />;
+  return (
+    <mesh ref={meshRef}>
+      <boxGeometry args={[1, 1, 1]} />
+      <meshStandardMaterial color={'orange'} />
+    </mesh>
+  );
 };
 
 export default Cube;

@@ -1,13 +1,27 @@
-import React from 'react';
-import HandControl from './HandControl';
+// App.js
+import React, { useState } from 'react';
+import { Canvas } from '@react-three/fiber';
+import Cube from './Cube';
+import HandTracker from './HandTracker';
 
-function App() {
+const App = () => {
+  const [rotation, setRotation] = useState({ x: 0, y: 0 });
+
+  const handleHandDetected = (position) => {
+    setRotation(position);
+  };
+
   return (
-    <div className="App">
-      <h1>Rotate Cube with Your Hand</h1>
-      <HandControl />
+    <div>
+      <h1>MediaPipe + Three.js Hand Rotation</h1>
+      <HandTracker onHandDetected={handleHandDetected} />
+      <Canvas>
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
+        <Cube rotation={rotation} />
+      </Canvas>
     </div>
   );
-}
+};
 
 export default App;
