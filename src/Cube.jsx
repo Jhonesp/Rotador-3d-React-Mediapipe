@@ -1,13 +1,14 @@
 // src/Cube.js
 import React, { useRef, useEffect } from 'react';
 import { Canvas, useFrame , useLoader} from '@react-three/fiber';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { useGLTF } from '@react-three/drei';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader'
+import meshUrl from '/models/realistic_human_heart/scene.gltf'
 
 const Cube = ({rotation}) => {
   const meshRef = useRef();
-  // Animar el cubo en cada frame
-  const scene = useLoader(GLTFLoader, '/realistic_human_heart/scene.gltf')
   // Cargar el modelo GLTF
+  const scene = useLoader(GLTFLoader, meshUrl)
 
   useEffect(() => {
     if (rotation && rotation.length > 0) {
@@ -32,8 +33,8 @@ const Cube = ({rotation}) => {
   return (
     <primitive 
       ref={meshRef} 
-      object={scene} 
-      scale={0.5} 
+      object={scene.scene} 
+      scale={2} 
     />
   );
 };
@@ -44,8 +45,11 @@ const Scene = ({rotation}) => {
     <Canvas
       style={{ background: 'black' , height: '50vh'}} // Fondo negro
     >
-      <ambientLight />
-      <pointLight position={[10, 10, 10]} />
+      <directionalLight
+        position={[1.0, 1.0, 6]}
+        castShadow
+        intensity={Math.PI * 2}
+      />
       <Cube rotation={rotation}/>
     </Canvas>
     </>
