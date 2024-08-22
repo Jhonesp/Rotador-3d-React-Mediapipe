@@ -8,6 +8,9 @@ const Cube = ({rotation}) => {
   const meshRef = useRef();
   // Cargar el modelo GLTF
   const scene = useLoader(GLTFLoader, meshUrl)
+  // Ref para las rotaciones objetivo
+  const targetRotation = useRef({ x: 0, y: 0 });
+
 
   useEffect(() => {
     if (rotation && rotation.length > 0) {
@@ -39,14 +42,19 @@ const Cube = ({rotation}) => {
 };
 
 const Scene = ({rotation}) => {
+  const handleCreated = ({ gl }) => {
+    // Establecer la proporción de píxeles más baja
+    gl.setPixelRatio(window.devicePixelRatio * 0.4); // Reducir a la mitad la densidad de píxeles
+    gl.setSize(window.innerWidth, window.innerHeight); // Establecer tamaño del canvas
+  };
   return (
     <>
     <Canvas
-      style={{ background: 'black' , height: '50vh'}} // Fondo negro
+      style={{ background: 'black' , height: '100vh'}} // Fondo negro
+      onCreated={handleCreated}
     >
       <directionalLight
-        position={[1.0, 1.0, 6]}
-        castShadow
+        position={[1.0, 1.0, 5]}
         intensity={Math.PI * 2}
       />
       <Cube rotation={rotation}/>
