@@ -1,7 +1,6 @@
 // src/Cube.js
 import React, { useRef, useEffect } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import Demo from './Demo';
 
 const Cube = ({rotation}) => {
   const meshRef = useRef();
@@ -13,7 +12,7 @@ const Cube = ({rotation}) => {
       const y = rotation[0].y;
   
       meshRef.current.rotation.x = y * Math.PI * 2;
-      meshRef.current.rotation.y = x * Math.PI * 2;
+      meshRef.current.rotation.y = x * Math.PI * -2;
     }
   }, [rotation]);
 

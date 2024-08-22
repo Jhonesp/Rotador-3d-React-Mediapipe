@@ -50,7 +50,6 @@ const Demo = ({rotation}) => {
             if (videoRef.current && videoRef.current.readyState >= 2) {
                 const detections = handLandmarker.detectForVideo(videoRef.current, performance.now());
                 setHandPresence(detections.handednesses.length > 0);
-                setArray(detections.landmarks);
                 
                 // Assuming detections.landmarks is an array of landmark objects
                 if (detections.landmarks) {
@@ -72,10 +71,6 @@ const Demo = ({rotation}) => {
         };
 
         startWebcam();
-        if(array > 0){
-            console.log('hola');
-            
-        }
 
         return () => {
             if (videoRef.current && videoRef.current.srcObject) {
@@ -88,7 +83,6 @@ const Demo = ({rotation}) => {
                 cancelAnimationFrame(animationFrameId);
             }
         };
-
         
     }, []);
 
