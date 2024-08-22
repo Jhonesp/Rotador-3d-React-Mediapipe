@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FilesetResolver, HandLandmarker } from "@mediapipe/tasks-vision";
-const Demo = () => {
+
+const Demo = ({rotation}) => {
     const videoRef = useRef(null);
     const canvasRef = useRef(null);
+    const [array, setArray] = useState([])
     const [handPresence, setHandPresence] = useState(null);
 
     useEffect(() => {
@@ -16,8 +18,7 @@ const Demo = () => {
                 );
                 handLandmarker = await HandLandmarker.createFromOptions(
                     vision, {
-                        baseOptions: {  modelAssetPath:
-                            'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task'},
+                        baseOptions: { modelAssetPath: "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task" },
                         numHands: 2,
                         runningMode: "video"
                     }
@@ -33,12 +34,11 @@ const Demo = () => {
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = 'white';
-
+    
     landmarksArray.forEach(landmarks => {
         landmarks.forEach(landmark => {
             const x = landmark.x * canvas.width;
             const y = landmark.y * canvas.height;
-
             ctx.beginPath();
             ctx.arc(x, y, 5, 0, 2 * Math.PI); // Draw a circle for each landmark
             ctx.fill();
@@ -50,10 +50,12 @@ const Demo = () => {
             if (videoRef.current && videoRef.current.readyState >= 2) {
                 const detections = handLandmarker.detectForVideo(videoRef.current, performance.now());
                 setHandPresence(detections.handednesses.length > 0);
-
+                setArray(detections.landmarks);
+                
                 // Assuming detections.landmarks is an array of landmark objects
                 if (detections.landmarks) {
                     drawLandmarks(detections.landmarks);
+                    rotation(detections.landmarks[0]);
                 }
             }
             requestAnimationFrame(detectHands);
@@ -70,6 +72,10 @@ const Demo = () => {
         };
 
         startWebcam();
+        if(array > 0){
+            console.log('hola');
+            
+        }
 
         return () => {
             if (videoRef.current && videoRef.current.srcObject) {
@@ -82,6 +88,8 @@ const Demo = () => {
                 cancelAnimationFrame(animationFrameId);
             }
         };
+
+        
     }, []);
 
     return (

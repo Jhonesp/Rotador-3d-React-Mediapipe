@@ -1,23 +1,53 @@
-// Cube.js
-import React, { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
+// src/Cube.js
+import React, { useRef, useEffect } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import Demo from './Demo';
 
-const Cube = ({ rotation }) => {
+const Cube = ({rotation}) => {
   const meshRef = useRef();
+  // Animar el cubo en cada frame
 
-  useFrame(() => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x = rotation.y * Math.PI; // Rotación en X
-      meshRef.current.rotation.y = rotation.x * Math.PI; // Rotación en Y
+  useEffect(() => {
+    if (rotation && rotation.length > 0) {
+      const x = rotation[0].x;
+      const y = rotation[0].y;
+  
+      meshRef.current.rotation.x = y * Math.PI * 2;
+      meshRef.current.rotation.y = x * Math.PI * 2;
     }
-  });
+  }, [rotation]);
+
+  // useFrame(() => {
+  //   if(rotation && rotation.length > 0){
+  //     const x = rotation[0].x;
+  //     const y = rotation[0].y;
+  //     meshRef.current.rotation.x = y * Math.PI * 2;
+  //     meshRef.current.rotation.y = x * Math.PI * 2;
+  //   }   
+    
+  // });
 
   return (
     <mesh ref={meshRef}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={'orange'} />
+      {/* Aumenta el tamaño del cubo a 4x4x4 */}
+      <boxGeometry args={[4, 4, 4]} />
+      <meshStandardMaterial color="orange" />
     </mesh>
   );
 };
 
-export default Cube;
+const Scene = ({rotation}) => {
+  return (
+    <>
+    <Canvas
+      style={{ background: 'black' , height: '50vh'}} // Fondo negro
+    >
+      <ambientLight />
+      <pointLight position={[10, 10, 10]} />
+      <Cube rotation={rotation}/>
+    </Canvas>
+    </>
+  );
+};
+
+export default Scene;
