@@ -1,10 +1,13 @@
 // src/Cube.js
 import React, { useRef, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame , useLoader} from '@react-three/fiber';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 
 const Cube = ({rotation}) => {
   const meshRef = useRef();
   // Animar el cubo en cada frame
+  const scene = useLoader(GLTFLoader, '/realistic_human_heart/scene.gltf')
+  // Cargar el modelo GLTF
 
   useEffect(() => {
     if (rotation && rotation.length > 0) {
@@ -27,11 +30,11 @@ const Cube = ({rotation}) => {
   // });
 
   return (
-    <mesh ref={meshRef}>
-      {/* Aumenta el tamaño del cubo a 4x4x4 */}
-      <boxGeometry args={[4, 4, 4]} />
-      <meshStandardMaterial color="orange" />
-    </mesh>
+    <primitive 
+      ref={meshRef} 
+      object={scene} 
+      scale={0.5} 
+    />
   );
 };
 
