@@ -29,22 +29,22 @@ const Demo = ({rotation}) => {
             }
         };
 
-    const drawLandmarks = (landmarksArray) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = 'white';
+//     const drawLandmarks = (landmarksArray) => {
+//     const canvas = canvasRef.current;
+//     const ctx = canvas.getContext('2d');
+//     ctx.clearRect(0, 0, canvas.width, canvas.height);
+//     ctx.fillStyle = 'white';
     
-    landmarksArray.forEach(landmarks => {
-        landmarks.forEach(landmark => {
-            const x = landmark.x * canvas.width;
-            const y = landmark.y * canvas.height;
-            ctx.beginPath();
-            ctx.arc(x, y, 5, 0, 2 * Math.PI); // Draw a circle for each landmark
-            ctx.fill();
-        });
-    });
-};
+//     landmarksArray.forEach(landmarks => {
+//         landmarks.forEach(landmark => {
+//             const x = landmark.x * canvas.width;
+//             const y = landmark.y * canvas.height;
+//             ctx.beginPath();
+//             ctx.arc(x, y, 5, 0, 2 * Math.PI); // Draw a circle for each landmark
+//             ctx.fill();
+//         });
+//     });
+// };
 
         const detectHands = () => {
             if (videoRef.current && videoRef.current.readyState >= 2) {
@@ -53,7 +53,6 @@ const Demo = ({rotation}) => {
                 
                 // Assuming detections.landmarks is an array of landmark objects
                 if (detections.landmarks) {
-                    drawLandmarks(detections.landmarks);
                     rotation(detections.landmarks[0]);
                 }
             }
@@ -88,10 +87,9 @@ const Demo = ({rotation}) => {
 
     return (
         <>
-        <h1>Is there a Hand? {handPresence ? "Yes" : "No"}</h1>
-        <div style={{ position: "relative" }}>
+        <h3 style={{position:'absolute', color:'white', top:'0px', left:'20px'}}>Manos detectadas: {handPresence ? "Si" : "No"}</h3>
+        <div style={{ position: "relative", display:'none' }}>
             <video ref={videoRef} autoPlay playsInline ></video>
-            <canvas ref={canvasRef} style={{ backgroundColor: "black" , width:"600px", height:"480px"}}></canvas>
         </div>
     </>
     );

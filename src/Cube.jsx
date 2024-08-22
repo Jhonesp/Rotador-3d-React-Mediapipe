@@ -1,7 +1,6 @@
 // src/Cube.js
 import React, { useRef, useEffect } from 'react';
 import { Canvas, useFrame , useLoader} from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader'
 import meshUrl from '/models/realistic_human_heart/scene.gltf'
 
