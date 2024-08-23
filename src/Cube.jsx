@@ -14,7 +14,7 @@ const Cube = ({rotation}) => {
   const smoothedScale = useRef(1);
 
   // Factor de suavizado (ajustable)
-  const smoothingFactor = 0.5;  // Valor entre 0 y 1
+  const smoothingFactor = 0.25;  // Valor entre 0 y 1
   
 
   useEffect(() => {
