@@ -8,6 +8,14 @@ const Cube = ({rotation}) => {
   const meshRef = useRef();
   // Cargar el modelo GLTF
   const scene = useLoader(GLTFLoader, meshUrl)
+  // Variables para almacenar las rotaciones suavizadas
+  const smoothedRotation = useRef({ x: 0, y: 0 });
+  // Variable para almacenar el escalado suavizado
+  const smoothedScale = useRef(1);
+
+  // Factor de suavizado (ajustable)
+  const smoothingFactor = 0.5;  // Valor entre 0 y 1
+  
 
   useEffect(() => {
     if (rotation && rotation.length > 0) {
@@ -21,22 +29,20 @@ const Cube = ({rotation}) => {
         Math.pow(thumbTip.z - pinkyTip.z, 2)
       );
       const scale = Math.min(Math.max(1 / distance, 0.5), 4); // Limitar el rango de escala
-      meshRef.current.scale.set(scale, scale, scale);
+      // Aplicar suavizado exponencial al escalado
+      smoothedScale.current += (scale - smoothedScale.current) * 0.2;
+      meshRef.current.scale.set(smoothedScale.current, smoothedScale.current, smoothedScale.current);
   
-      meshRef.current.rotation.x = y * Math.PI * 2;
-      meshRef.current.rotation.y = x * Math.PI * -2;
+      const targetRotationX = y * Math.PI * 2;
+      const targetRotationY = x * Math.PI * -2;
+      // Aplicar suavizado exponencial
+      smoothedRotation.current.x += (targetRotationX - smoothedRotation.current.x) * smoothingFactor;
+      smoothedRotation.current.y += (targetRotationY - smoothedRotation.current.y) * smoothingFactor;
+      // Aplicar las rotaciones suavizadas al modelo
+      meshRef.current.rotation.x = smoothedRotation.current.x;
+      meshRef.current.rotation.y = smoothedRotation.current.y;
     }
   }, [rotation]);
-
-  // useFrame(() => {
-  //   if(rotation && rotation.length > 0){
-  //     const x = rotation[0].x;
-  //     const y = rotation[0].y;
-  //     meshRef.current.rotation.x = y * Math.PI * 2;
-  //     meshRef.current.rotation.y = x * Math.PI * 2;
-  //   }   
-    
-  // });
 
   return (
     <primitive 
