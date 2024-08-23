@@ -28,7 +28,7 @@ const Cube = ({rotation}) => {
         Math.pow(thumbTip.y - pinkyTip.y, 2) +
         Math.pow(thumbTip.z - pinkyTip.z, 2)
       );
-      const scale = Math.min(Math.max(1 / distance, 0.5), 4); // Limitar el rango de escala
+      const scale = Math.min(Math.max(0.8 / distance, 1), 4); // Limitar el rango de escala
       // Aplicar suavizado exponencial al escalado
       smoothedScale.current += (scale - smoothedScale.current) * 0.2;
       meshRef.current.scale.set(smoothedScale.current, smoothedScale.current, smoothedScale.current);
@@ -45,8 +45,6 @@ const Cube = ({rotation}) => {
       }
       
       // Aplicar las rotaciones suavizadas al modelo
-      console.log(smoothedRotation.current.y);
-      
       meshRef.current.rotation.x = smoothedRotation.current.x+0.3;
       meshRef.current.rotation.y = -smoothedRotation.current.y+3;
     }
@@ -64,7 +62,6 @@ const Cube = ({rotation}) => {
 const Scene = ({rotation}) => {
   const handleCreated = ({ gl }) => {
     // Establecer la proporción de píxeles más baja
-    gl.setPixelRatio(window.devicePixelRatio * 0.4); // Reducir a la mitad la densidad de píxeles
     gl.setSize(window.innerWidth, window.innerHeight); // Establecer tamaño del canvas
   };
   return (
