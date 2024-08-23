@@ -5,7 +5,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader'
 import meshUrl from '/models/realistic_human_heart/scene.gltf'
 
 const Cube = ({rotation}) => {
-  const meshRef = useRef();
+  const meshRef = useRef({ x: 0, y: 0 });
   // Cargar el modelo GLTF
   const scene = useLoader(GLTFLoader, meshUrl)
   // Variables para almacenar las rotaciones suavizadas
@@ -34,13 +34,21 @@ const Cube = ({rotation}) => {
       meshRef.current.scale.set(smoothedScale.current, smoothedScale.current, smoothedScale.current);
   
       const targetRotationX = y * Math.PI * 2;
-      const targetRotationY = x * Math.PI * -2;
+      const targetRotationY = x * Math.PI * 2;
       // Aplicar suavizado exponencial
-      smoothedRotation.current.x += (targetRotationX - smoothedRotation.current.x) * smoothingFactor;
-      smoothedRotation.current.y += (targetRotationY - smoothedRotation.current.y) * smoothingFactor;
+      if(smoothedRotation.current.x < 1){
+        smoothedRotation.current.x = targetRotationX;
+        smoothedRotation.current.y = targetRotationY;
+      }else{
+        smoothedRotation.current.x += (targetRotationX - smoothedRotation.current.x) * smoothingFactor;
+        smoothedRotation.current.y += (targetRotationY - smoothedRotation.current.y) * smoothingFactor;
+      }
+      
       // Aplicar las rotaciones suavizadas al modelo
-      meshRef.current.rotation.x = smoothedRotation.current.x;
-      meshRef.current.rotation.y = smoothedRotation.current.y;
+      console.log(smoothedRotation.current.y);
+      
+      meshRef.current.rotation.x = smoothedRotation.current.x+0.3;
+      meshRef.current.rotation.y = -smoothedRotation.current.y+3;
     }
   }, [rotation]);
 
