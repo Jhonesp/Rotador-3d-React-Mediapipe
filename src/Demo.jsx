@@ -19,7 +19,7 @@ const Demo = ({rotation}) => {
                 handLandmarker = await HandLandmarker.createFromOptions(
                     vision, {
                         baseOptions: { modelAssetPath: "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task" },
-                        numHands: 2,
+                        numHands: 1,
                         runningMode: "video"
                     }
                 );
@@ -87,7 +87,7 @@ const Demo = ({rotation}) => {
 
     return (
         <>
-        <h3 style={{position:'absolute', color:'white', top:'0px', left:'20px'}}>Manos detectadas: {handPresence ? "Si" : "No"}</h3>
+        <h3 style={{position:'absolute', color:'white', top:'0px', left:'20px'}}>Mano detectada: {handPresence ? "Si" : "No"}</h3>
         <div style={{ position: "relative", display:'none' }}>
             <video ref={videoRef} autoPlay playsInline ></video>
         </div>

@@ -8,14 +8,20 @@ const Cube = ({rotation}) => {
   const meshRef = useRef();
   // Cargar el modelo GLTF
   const scene = useLoader(GLTFLoader, meshUrl)
-  // Ref para las rotaciones objetivo
-  const targetRotation = useRef({ x: 0, y: 0 });
-
 
   useEffect(() => {
     if (rotation && rotation.length > 0) {
       const x = rotation[0].x;
       const y = rotation[0].y;
+      const thumbTip = rotation[4]; // Punta del pulgar
+      const pinkyTip = rotation[20]; // Punta del meñique
+      const distance = Math.sqrt(
+        Math.pow(thumbTip.x - pinkyTip.x, 2) +
+        Math.pow(thumbTip.y - pinkyTip.y, 2) +
+        Math.pow(thumbTip.z - pinkyTip.z, 2)
+      );
+      const scale = Math.min(Math.max(1 / distance, 0.5), 4); // Limitar el rango de escala
+      meshRef.current.scale.set(scale, scale, scale);
   
       meshRef.current.rotation.x = y * Math.PI * 2;
       meshRef.current.rotation.y = x * Math.PI * -2;
