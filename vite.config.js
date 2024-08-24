@@ -5,5 +5,5 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   assetsInclude: ['**/*.gltf'],
-  base: "/3d-Proyect",
+  base: "/Rotador-3d-React-Mediapipe",
 })
